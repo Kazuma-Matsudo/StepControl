@@ -1,0 +1,1227 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StepFlow テストページ</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        padding: 32px;
+        background: #f5f5f5;
+        color: #333;
+      }
+      h1 {
+        margin-bottom: 8px;
+        color: #4a90d9;
+      }
+      .subtitle {
+        color: #888;
+        margin-bottom: 24px;
+      }
+
+      .section {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+      .section h2 {
+        font-size: 16px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #eee;
+      }
+      .section p {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 12px;
+      }
+
+      /* クリックテスト */
+      .btn-test {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+      }
+      .btn-blue {
+        background: #4a90d9;
+        color: #fff;
+      }
+      .btn-green {
+        background: #28a745;
+        color: #fff;
+      }
+      .btn-red {
+        background: #dc3545;
+        color: #fff;
+      }
+      #click-log {
+        margin-top: 12px;
+        padding: 8px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #666;
+        min-height: 30px;
+      }
+
+      /* 入力テスト */
+      .form-group {
+        margin-bottom: 12px;
+      }
+      .form-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 4px;
+      }
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        max-width: 400px;
+        padding: 8px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .form-group textarea {
+        min-height: 60px;
+        resize: vertical;
+      }
+      #form-output {
+        margin-top: 12px;
+        padding: 8px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #666;
+        min-height: 30px;
+      }
+
+      /* コピーテスト */
+      .copy-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .copy-item:last-child {
+        border-bottom: none;
+      }
+      .copy-label {
+        font-size: 12px;
+        color: #888;
+        min-width: 80px;
+      }
+      .copy-value {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .copy-value a {
+        color: #4a90d9;
+        text-decoration: none;
+      }
+      .copy-value a:hover {
+        text-decoration: underline;
+      }
+
+      /* セレクタガイド */
+      .selector-guide {
+        margin-top: 24px;
+      }
+      .selector-guide table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      .selector-guide th,
+      .selector-guide td {
+        text-align: left;
+        padding: 8px 12px;
+        border-bottom: 1px solid #eee;
+      }
+      .selector-guide th {
+        background: #f8f9fa;
+        font-weight: 600;
+        color: #555;
+      }
+      .selector-guide code {
+        background: #e9ecef;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 12px;
+      }
+
+      /* 動的コンテンツ */
+      #dynamic-content {
+        padding: 12px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        min-height: 40px;
+      }
+      .hidden-panel {
+        display: none;
+        padding: 12px;
+        background: #fff3cd;
+        border-radius: 4px;
+        margin-top: 8px;
+      }
+      .hidden-panel.visible {
+        display: block;
+      }
+
+      /* 検索・絞り込みテスト */
+      #search-product {
+        width: 100%;
+        max-width: 400px;
+        padding: 8px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      #search-btn {
+        margin-left: 8px;
+      }
+      #search-result-list {
+        list-style: none;
+        margin-top: 12px;
+      }
+      #search-result-list li {
+        padding: 10px 14px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.1s;
+      }
+      #search-result-list li:hover {
+        background: #eef4fc;
+      }
+      #search-result-list li.selected {
+        background: #d6eaff;
+        border-color: #4a90d9;
+      }
+      .item-name {
+        font-weight: 600;
+      }
+      .item-category {
+        font-size: 12px;
+        color: #888;
+      }
+      .item-price {
+        font-weight: 600;
+        color: #28a745;
+      }
+      #selected-detail {
+        margin-top: 16px;
+        padding: 16px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        display: none;
+      }
+      #selected-detail.visible {
+        display: block;
+      }
+      #selected-detail h3 {
+        font-size: 15px;
+        margin-bottom: 8px;
+      }
+      .detail-row {
+        display: flex;
+        gap: 12px;
+        padding: 4px 0;
+        font-size: 13px;
+      }
+      .detail-label {
+        color: #888;
+        min-width: 80px;
+      }
+      .detail-value {
+        font-weight: 500;
+      }
+      #no-results {
+        display: none;
+        padding: 12px;
+        color: #888;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>StepFlow テストページ</h1>
+    <p class="subtitle">この画面で拡張機能の各操作をテストできます</p>
+
+    <!-- ===== クリックテスト ===== -->
+    <div class="section">
+      <h2>1. クリックテスト</h2>
+      <p>ボタンをクリックすると下のログにメッセージが表示されます。</p>
+      <button
+        id="btn-a"
+        class="btn-test btn-blue"
+        onclick="logClick('ボタンA がクリックされました')"
+      >
+        ボタンA
+      </button>
+      <button
+        id="btn-b"
+        class="btn-test btn-green"
+        onclick="logClick('ボタンB がクリックされました')"
+      >
+        ボタンB
+      </button>
+      <button
+        id="btn-c"
+        class="btn-test btn-red"
+        onclick="logClick('ボタンC がクリックされました')"
+      >
+        ボタンC
+      </button>
+      <button id="btn-toggle" class="btn-test btn-blue" onclick="togglePanel()">
+        パネル表示/非表示
+      </button>
+      <div id="hidden-panel" class="hidden-panel">
+        <span id="hidden-text">隠しパネルの中のテキストです</span>
+      </div>
+      <div id="click-log">ここにクリックログが表示されます</div>
+    </div>
+
+    <!-- ===== 入力テスト ===== -->
+    <div class="section">
+      <h2>2. 入力テスト</h2>
+      <p>フォームに値を入力すると下に結果が反映されます。</p>
+      <div class="form-group">
+        <label for="input-name">名前</label>
+        <input
+          type="text"
+          id="input-name"
+          placeholder="お名前を入力"
+          oninput="updateFormOutput()"
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-email">メールアドレス</label>
+        <input
+          type="email"
+          id="input-email"
+          placeholder="example@example.com"
+          oninput="updateFormOutput()"
+        />
+      </div>
+      <div class="form-group">
+        <label for="input-message">メッセージ</label>
+        <textarea
+          id="input-message"
+          placeholder="メッセージを入力"
+          oninput="updateFormOutput()"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="input-search">検索</label>
+        <input
+          type="text"
+          id="input-search"
+          class="search-box"
+          placeholder="検索キーワード"
+          oninput="updateFormOutput()"
+        />
+      </div>
+      <button id="btn-submit" class="btn-test btn-green" onclick="submitForm()">
+        送信
+      </button>
+      <div id="form-output">フォームの内容がここに表示されます</div>
+    </div>
+
+    <!-- ===== コピーテスト ===== -->
+    <div class="section">
+      <h2>3. コピーテスト</h2>
+      <p>以下のテキストやリンクをコピー対象として使えます。</p>
+      <div class="copy-item">
+        <span class="copy-label">商品名</span>
+        <span class="copy-value" id="product-name"
+          >ワイヤレスイヤホン Pro X</span
+        >
+      </div>
+      <div class="copy-item">
+        <span class="copy-label">価格</span>
+        <span class="copy-value" id="product-price">¥12,800</span>
+      </div>
+      <div class="copy-item">
+        <span class="copy-label">在庫状態</span>
+        <span class="copy-value" id="product-stock">在庫あり</span>
+      </div>
+      <div class="copy-item">
+        <span class="copy-label">リンク</span>
+        <span class="copy-value"
+          ><a id="product-link" href="https://example.com/product/12345"
+            >商品ページはこちら</a
+          ></span
+        >
+      </div>
+      <div class="copy-item">
+        <span class="copy-label">URLテキスト</span>
+        <span class="copy-value"
+          ><a id="product-url" href="https://example.com/product/12345"
+            >https://example.com/product/12345</a
+          ></span
+        >
+      </div>
+      <div class="copy-item">
+        <span class="copy-label">説明</span>
+        <span class="copy-value" id="product-desc"
+          >高音質ノイズキャンセリング搭載。最大30時間のバッテリー持続。</span
+        >
+      </div>
+    </div>
+
+    <!-- ===== 検索・絞り込み・選択テスト ===== -->
+    <div class="section">
+      <h2>4. 検索・絞り込み・選択テスト</h2>
+      <p>
+        キーワードを入力して検索 → 絞り込まれたリストから1つ選択 →
+        詳細が表示されます。
+      </p>
+      <div style="display: flex; align-items: center; margin-bottom: 4px">
+        <input
+          type="text"
+          id="search-product"
+          placeholder="商品名・カテゴリで検索（例: イヤホン, PC）"
+        />
+        <button
+          id="search-btn"
+          class="btn-test btn-blue"
+          onclick="searchProducts()"
+        >
+          検索
+        </button>
+      </div>
+      <div id="no-results">該当する商品がありません</div>
+      <ul id="search-result-list"></ul>
+      <div id="selected-detail">
+        <h3 id="detail-name"></h3>
+        <div class="detail-row">
+          <span class="detail-label">カテゴリ</span>
+          <span class="detail-value" id="detail-category"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">価格</span>
+          <span class="detail-value" id="detail-price"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">在庫</span>
+          <span class="detail-value" id="detail-stock"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">説明</span>
+          <span class="detail-value" id="detail-desc"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">リンク</span>
+          <span class="detail-value"><a id="detail-link" href="#">-</a></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 同一セレクタ・インデックステスト ===== -->
+    <div class="section">
+      <h2>5. 同一セレクタ・インデックステスト</h2>
+      <p>
+        同じクラスやタグを持つ要素が複数並んでいます。ピッカーで選択すると「N番目」が自動設定されることを確認できます。
+      </p>
+
+      <h3 style="font-size: 14px; margin: 12px 0 8px; color: #555">
+        同一クラスのボタン（.action-btn）
+      </h3>
+      <button
+        class="btn-test btn-blue action-btn"
+        onclick="logClick('アクション1 がクリックされました')"
+      >
+        アクション1
+      </button>
+      <button
+        class="btn-test btn-blue action-btn"
+        onclick="logClick('アクション2 がクリックされました')"
+      >
+        アクション2
+      </button>
+      <button
+        class="btn-test btn-blue action-btn"
+        onclick="logClick('アクション3 がクリックされました')"
+      >
+        アクション3
+      </button>
+      <button
+        class="btn-test btn-blue action-btn"
+        onclick="logClick('アクション4 がクリックされました')"
+      >
+        アクション4
+      </button>
+
+      <h3 style="font-size: 14px; margin: 12px 0 8px; color: #555">
+        同一クラスのテキスト（.info-text）
+      </h3>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap">
+        <span class="copy-value info-text">情報テキストA</span>
+        <span class="copy-value info-text">情報テキストB</span>
+        <span class="copy-value info-text">情報テキストC</span>
+      </div>
+
+      <h3 style="font-size: 14px; margin: 12px 0 8px; color: #555">
+        同一クラスの入力欄（.multi-input）
+      </h3>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap">
+        <input
+          type="text"
+          class="multi-input"
+          placeholder="入力欄1"
+          style="
+            width: 150px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          "
+        />
+        <input
+          type="text"
+          class="multi-input"
+          placeholder="入力欄2"
+          style="
+            width: 150px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          "
+        />
+        <input
+          type="text"
+          class="multi-input"
+          placeholder="入力欄3"
+          style="
+            width: 150px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          "
+        />
+      </div>
+
+      <h3 style="font-size: 14px; margin: 12px 0 8px; color: #555">
+        同一クラスのリンク（.sample-link）
+      </h3>
+      <div style="display: flex; gap: 16px">
+        <a
+          href="https://example.com/link/1"
+          class="sample-link"
+          style="color: #4a90d9"
+          >リンク1</a
+        >
+        <a
+          href="https://example.com/link/2"
+          class="sample-link"
+          style="color: #4a90d9"
+          >リンク2</a
+        >
+        <a
+          href="https://example.com/link/3"
+          class="sample-link"
+          style="color: #4a90d9"
+          >リンク3</a
+        >
+      </div>
+
+      <div
+        id="index-test-log"
+        style="
+          margin-top: 12px;
+          padding: 8px;
+          background: #f8f9fa;
+          border-radius: 4px;
+          font-size: 12px;
+          color: #666;
+        "
+      >
+        ピッカーで上の要素を選択し、セレクタと「N番目の要素」が自動設定されることを確認してください
+      </div>
+    </div>
+
+    <!-- ===== セレクトボックステスト ===== -->
+    <div class="section">
+      <h2>6. セレクトボックステスト</h2>
+      <p>
+        セレクトボックス（ドロップダウン）に値を設定するテストです。inputステップで
+        value にオプションの value 値を指定します。
+      </p>
+
+      <div class="form-group">
+        <label for="select-category">カテゴリ選択</label>
+        <select id="select-category" onchange="updateSelectOutput()">
+          <option value="">-- 選択してください --</option>
+          <option value="audio">オーディオ</option>
+          <option value="pc">PC周辺機器</option>
+          <option value="display">ディスプレイ</option>
+          <option value="mobile">モバイル</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="select-priority">優先度</label>
+        <select id="select-priority" onchange="updateSelectOutput()">
+          <option value="low">低</option>
+          <option value="medium">中</option>
+          <option value="high">高</option>
+          <option value="urgent">緊急</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="select-quantity">数量</label>
+        <select id="select-quantity" onchange="updateSelectOutput()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+
+      <h3 style="font-size: 14px; margin: 12px 0 8px; color: #555">
+        同一クラスのセレクトボックス（.filter-select）
+      </h3>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap">
+        <select
+          class="filter-select"
+          onchange="updateSelectOutput()"
+          style="padding: 8px; border: 1px solid #ccc; border-radius: 4px"
+        >
+          <option value="">色を選択</option>
+          <option value="red">赤</option>
+          <option value="blue">青</option>
+          <option value="green">緑</option>
+        </select>
+        <select
+          class="filter-select"
+          onchange="updateSelectOutput()"
+          style="padding: 8px; border: 1px solid #ccc; border-radius: 4px"
+        >
+          <option value="">サイズを選択</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+        </select>
+        <select
+          class="filter-select"
+          onchange="updateSelectOutput()"
+          style="padding: 8px; border: 1px solid #ccc; border-radius: 4px"
+        >
+          <option value="">素材を選択</option>
+          <option value="cotton">コットン</option>
+          <option value="polyester">ポリエステル</option>
+          <option value="wool">ウール</option>
+        </select>
+      </div>
+
+      <div
+        id="select-output"
+        style="
+          margin-top: 12px;
+          padding: 8px;
+          background: #f8f9fa;
+          border-radius: 4px;
+          font-size: 12px;
+          color: #666;
+        "
+      >
+        セレクトボックスの値がここに表示されます
+      </div>
+    </div>
+
+    <!-- ===== チェックボックス・ラジオボタンテスト ===== -->
+    <div class="section">
+      <h2>6b. チェックボックス・ラジオボタンテスト</h2>
+      <p>クリックステップで切り替えできることを確認します。</p>
+
+      <h3 style="font-size: 14px; margin: 12px 0 8px; color: #555">
+        チェックボックス
+      </h3>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+          "
+        >
+          <input
+            type="checkbox"
+            id="chk-option1"
+            onchange="updateCheckOutput()"
+          />
+          オプション1: メール通知
+        </label>
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+          "
+        >
+          <input
+            type="checkbox"
+            id="chk-option2"
+            onchange="updateCheckOutput()"
+          />
+          オプション2: プッシュ通知
+        </label>
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+          "
+        >
+          <input
+            type="checkbox"
+            id="chk-option3"
+            onchange="updateCheckOutput()"
+          />
+          オプション3: SMS通知
+        </label>
+      </div>
+
+      <h3 style="font-size: 14px; margin: 12px 0 8px; color: #555">
+        ラジオボタン
+      </h3>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+          "
+        >
+          <input
+            type="radio"
+            name="shipping"
+            id="radio-standard"
+            value="standard"
+            onchange="updateCheckOutput()"
+            checked
+          />
+          通常配送（3〜5日）
+        </label>
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+          "
+        >
+          <input
+            type="radio"
+            name="shipping"
+            id="radio-express"
+            value="express"
+            onchange="updateCheckOutput()"
+          />
+          速達配送（1〜2日）
+        </label>
+        <label
+          style="
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            cursor: pointer;
+          "
+        >
+          <input
+            type="radio"
+            name="shipping"
+            id="radio-sameday"
+            value="sameday"
+            onchange="updateCheckOutput()"
+          />
+          当日配送
+        </label>
+      </div>
+
+      <div
+        id="check-output"
+        style="
+          margin-top: 12px;
+          padding: 8px;
+          background: #f8f9fa;
+          border-radius: 4px;
+          font-size: 12px;
+          color: #666;
+        "
+      >
+        チェック状態がここに表示されます
+      </div>
+    </div>
+
+    <!-- ===== 動的コンテンツ ===== -->
+    <div class="section">
+      <h2>7. 動的コンテンツ</h2>
+      <p>
+        ボタンを押すとコンテンツが変わります。クリック→コピーの連携テストに使えます。
+      </p>
+      <button id="btn-load" class="btn-test btn-blue" onclick="loadContent()">
+        コンテンツ読み込み
+      </button>
+      <button id="btn-reset" class="btn-test btn-red" onclick="resetContent()">
+        リセット
+      </button>
+      <div id="dynamic-content">
+        「コンテンツ読み込み」ボタンを押してください
+      </div>
+    </div>
+
+    <!-- ===== セレクタガイド ===== -->
+    <div class="section selector-guide">
+      <h2>8. セレクタガイド</h2>
+      <p>StepFlowで使えるCSSセレクタの例です。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>操作</th>
+            <th>セレクタ</th>
+            <th>説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="3" style="font-weight: 600; color: #4a90d9">
+              セクション1〜3: 基本操作
+            </td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#btn-a</code></td>
+            <td>ボタンA をクリック</td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#btn-toggle</code></td>
+            <td>パネル表示切替</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>#input-name</code></td>
+            <td>名前フィールド</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>#input-email</code></td>
+            <td>メールフィールド</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#product-name</code></td>
+            <td>商品名テキスト</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#product-price</code></td>
+            <td>価格テキスト</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#product-link</code></td>
+            <td>リンク → テキスト(URL)形式</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="font-weight: 600; color: #4a90d9">
+              セクション5:
+              同一セレクタ・インデックステスト（ピッカーでN番目を自動取得）
+            </td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>.action-btn</code> + N番目: 2</td>
+            <td>アクション2ボタン（同一クラス4つの2番目）</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>.info-text</code> + N番目: 3</td>
+            <td>情報テキストC（同一クラス3つの3番目）</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>.multi-input</code> + N番目: 1</td>
+            <td>入力欄1（同一クラス3つの1番目）</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>a.sample-link</code> + N番目: 2</td>
+            <td>リンク2（同一クラス3つの2番目）</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="font-weight: 600; color: #4a90d9">
+              セクション6: セレクトボックス・チェックボックス・ラジオボタン
+            </td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>#select-category</code></td>
+            <td>カテゴリ選択（value: audio, pc, display, mobile）</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>#select-priority</code></td>
+            <td>優先度選択（value: low, medium, high, urgent）</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>#select-quantity</code></td>
+            <td>数量選択（value: 1, 2, 3, 5, 10）</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>.filter-select</code> + N番目: 1</td>
+            <td>色フィルタ（value: red, blue, green）</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>.filter-select</code> + N番目: 2</td>
+            <td>サイズフィルタ（value: S, M, L, XL）</td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#chk-option1</code></td>
+            <td>チェックボックス: メール通知</td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#chk-option2</code></td>
+            <td>チェックボックス: プッシュ通知</td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#radio-express</code></td>
+            <td>ラジオボタン: 速達配送</td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#radio-sameday</code></td>
+            <td>ラジオボタン: 当日配送</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="font-weight: 600; color: #4a90d9">
+              セクション4: 検索→選択→コピーの連携テスト例
+            </td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td><code>#search-product</code></td>
+            <td>検索ボックスにキーワード入力</td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#search-btn</code></td>
+            <td>検索ボタン</td>
+          </tr>
+          <tr>
+            <td>クリック</td>
+            <td><code>#search-result-list li:nth-child(1)</code></td>
+            <td>検索結果の1番目を選択</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#detail-name</code></td>
+            <td>選択した商品名</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#detail-price</code></td>
+            <td>選択した商品の価格</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#detail-category</code></td>
+            <td>選択した商品のカテゴリ</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#detail-desc</code></td>
+            <td>選択した商品の説明</td>
+          </tr>
+          <tr>
+            <td>コピー</td>
+            <td><code>#detail-link</code></td>
+            <td>商品リンク → テキスト(URL)形式</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      // クリックログ
+      function logClick(msg) {
+        const log = document.getElementById("click-log");
+        const time = new Date().toLocaleTimeString();
+        log.textContent = `[${time}] ${msg}`;
+      }
+
+      // パネル表示切替
+      function togglePanel() {
+        const panel = document.getElementById("hidden-panel");
+        panel.classList.toggle("visible");
+        logClick(
+          "パネル: " +
+            (panel.classList.contains("visible") ? "表示" : "非表示"),
+        );
+      }
+
+      // フォーム出力
+      function updateFormOutput() {
+        const name = document.getElementById("input-name").value;
+        const email = document.getElementById("input-email").value;
+        const message = document.getElementById("input-message").value;
+        const search = document.getElementById("input-search").value;
+        const parts = [];
+        if (name) parts.push("名前: " + name);
+        if (email) parts.push("メール: " + email);
+        if (message) parts.push("メッセージ: " + message);
+        if (search) parts.push("検索: " + search);
+        document.getElementById("form-output").textContent =
+          parts.join(" | ") || "フォームの内容がここに表示されます";
+      }
+
+      // フォーム送信
+      function submitForm() {
+        logClick("フォームが送信されました");
+        document.getElementById("form-output").textContent = "✓ 送信完了";
+      }
+
+      // 商品データ
+      const products = [
+        {
+          id: 1,
+          name: "ワイヤレスイヤホン Pro X",
+          category: "オーディオ",
+          price: "¥12,800",
+          stock: "在庫あり",
+          desc: "高音質ノイズキャンセリング搭載。最大30時間バッテリー。",
+          url: "https://example.com/product/1",
+        },
+        {
+          id: 2,
+          name: "ワイヤレスヘッドホン Z",
+          category: "オーディオ",
+          price: "¥24,500",
+          stock: "在庫あり",
+          desc: "密閉型オーバーイヤー。LDAC対応の高解像度サウンド。",
+          url: "https://example.com/product/2",
+        },
+        {
+          id: 3,
+          name: "ポータブルスピーカー BOOM",
+          category: "オーディオ",
+          price: "¥8,900",
+          stock: "残りわずか",
+          desc: "IPX7防水。アウトドアに最適なコンパクトスピーカー。",
+          url: "https://example.com/product/3",
+        },
+        {
+          id: 4,
+          name: "ゲーミングマウス Viper",
+          category: "PC周辺機器",
+          price: "¥7,600",
+          stock: "在庫あり",
+          desc: "超軽量63g。26000DPIセンサー搭載のFPS向けマウス。",
+          url: "https://example.com/product/4",
+        },
+        {
+          id: 5,
+          name: "メカニカルキーボード MK-75",
+          category: "PC周辺機器",
+          price: "¥15,400",
+          stock: "在庫あり",
+          desc: "75%レイアウト。ホットスワップ対応。RGBバックライト。",
+          url: "https://example.com/product/5",
+        },
+        {
+          id: 6,
+          name: "USBハブ 7ポート",
+          category: "PC周辺機器",
+          price: "¥3,200",
+          stock: "在庫切れ",
+          desc: "USB 3.0対応。セルフパワー/バスパワー両対応。",
+          url: "https://example.com/product/6",
+        },
+        {
+          id: 7,
+          name: "4Kモニター 27インチ",
+          category: "ディスプレイ",
+          price: "¥42,800",
+          stock: "在庫あり",
+          desc: "IPS, sRGB 99%, USB-C給電対応。デザインワークに最適。",
+          url: "https://example.com/product/7",
+        },
+        {
+          id: 8,
+          name: "ウルトラワイドモニター 34インチ",
+          category: "ディスプレイ",
+          price: "¥58,000",
+          stock: "残りわずか",
+          desc: "UWQHD 3440x1440。曲面パネルで高い没入感。",
+          url: "https://example.com/product/8",
+        },
+        {
+          id: 9,
+          name: "ノートPCスタンド アルミ",
+          category: "PC周辺機器",
+          price: "¥4,500",
+          stock: "在庫あり",
+          desc: "アルミ合金製。角度調節可能。放熱効果あり。",
+          url: "https://example.com/product/9",
+        },
+        {
+          id: 10,
+          name: "Webカメラ HD1080p",
+          category: "PC周辺機器",
+          price: "¥5,800",
+          stock: "在庫あり",
+          desc: "オートフォーカス。マイク内蔵。リモートワークに。",
+          url: "https://example.com/product/10",
+        },
+      ];
+
+      // 検索
+      function searchProducts() {
+        const query = document
+          .getElementById("search-product")
+          .value.trim()
+          .toLowerCase();
+        const list = document.getElementById("search-result-list");
+        const noResults = document.getElementById("no-results");
+        const detail = document.getElementById("selected-detail");
+        list.innerHTML = "";
+        detail.classList.remove("visible");
+
+        const filtered = query
+          ? products.filter(
+              (p) =>
+                p.name.toLowerCase().includes(query) ||
+                p.category.toLowerCase().includes(query),
+            )
+          : products;
+
+        if (filtered.length === 0) {
+          noResults.style.display = "block";
+          return;
+        }
+        noResults.style.display = "none";
+
+        filtered.forEach((p) => {
+          const li = document.createElement("li");
+          li.setAttribute("data-product-id", p.id);
+          li.innerHTML = `
+          <div>
+            <span class="item-name">${p.name}</span>
+            <span class="item-category">（${p.category}）</span>
+          </div>
+          <span class="item-price">${p.price}</span>
+        `;
+          li.addEventListener("click", () => selectProduct(p, li));
+          list.appendChild(li);
+        });
+      }
+
+      // 商品選択
+      function selectProduct(product, li) {
+        // 選択状態のリセット
+        document
+          .querySelectorAll("#search-result-list li")
+          .forEach((el) => el.classList.remove("selected"));
+        li.classList.add("selected");
+
+        // 詳細表示
+        document.getElementById("detail-name").textContent = product.name;
+        document.getElementById("detail-category").textContent =
+          product.category;
+        document.getElementById("detail-price").textContent = product.price;
+        document.getElementById("detail-stock").textContent = product.stock;
+        document.getElementById("detail-desc").textContent = product.desc;
+        const link = document.getElementById("detail-link");
+        link.href = product.url;
+        link.textContent = product.name + " の商品ページ";
+        document.getElementById("selected-detail").classList.add("visible");
+      }
+
+      // セレクトボックス出力
+      function updateSelectOutput() {
+        const cat = document.getElementById("select-category").value;
+        const pri = document.getElementById("select-priority").value;
+        const qty = document.getElementById("select-quantity").value;
+        const filters = Array.from(
+          document.querySelectorAll(".filter-select"),
+        ).map((s) => s.value || "未選択");
+        const parts = [];
+        parts.push("カテゴリ: " + (cat || "未選択"));
+        parts.push("優先度: " + pri);
+        parts.push("数量: " + qty);
+        parts.push("フィルタ: " + filters.join(", "));
+        document.getElementById("select-output").textContent =
+          parts.join(" | ");
+      }
+
+      // チェックボックス・ラジオ出力
+      function updateCheckOutput() {
+        const chks = ["chk-option1", "chk-option2", "chk-option3"]
+          .map((id) => document.getElementById(id))
+          .filter((el) => el.checked)
+          .map((el) => el.parentElement.textContent.trim());
+        const radio = document.querySelector('input[name="shipping"]:checked');
+        const parts = [];
+        parts.push("チェック: " + (chks.length > 0 ? chks.join(", ") : "なし"));
+        if (radio)
+          parts.push("配送: " + radio.parentElement.textContent.trim());
+        document.getElementById("check-output").textContent = parts.join(" | ");
+      }
+
+      // 動的コンテンツ
+      function loadContent() {
+        const content = document.getElementById("dynamic-content");
+        content.innerHTML = `
+        <div><strong>読み込み完了</strong> (${new Date().toLocaleTimeString()})</div>
+        <div id="loaded-title">動的に読み込まれたタイトル</div>
+        <div id="loaded-value">動的に読み込まれた値: ${Math.floor(Math.random() * 10000)}</div>
+      `;
+      }
+
+      function resetContent() {
+        document.getElementById("dynamic-content").textContent =
+          "「コンテンツ読み込み」ボタンを押してください";
+      }
+    </script>
+  </body>
+</html>

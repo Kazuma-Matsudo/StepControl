@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StepFlow</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ヘッダー -->
+      <header class="header">
+        <h1 class="header-title">StepFlow</h1>
+        <div class="header-actions">
+          <button id="btn-run" class="btn btn-run" title="実行">&#9654;</button>
+          <button id="btn-stop" class="btn btn-stop hidden" title="停止">
+            &#9632;
+          </button>
+        </div>
+      </header>
+
+      <!-- 実行結果パネル -->
+      <div id="runner-panel" class="runner-panel hidden">
+        <div id="runner-panel-header" class="runner-panel-header">
+          <span id="runner-toggle-label" class="runner-toggle-label"
+            >実行結果を閉じる</span
+          >
+        </div>
+        <div id="runner-panel-body" class="runner-panel-body">
+          <div class="section">
+            <div class="progress-info">
+              <span id="progress-text">準備中...</span>
+              <span id="elapsed-time" class="elapsed-time"></span>
+            </div>
+            <div class="progress-bar">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+          </div>
+          <div id="step-status-list" class="section"></div>
+          <div id="runner-result" class="section hidden">
+            <div class="result-header">
+              <label class="label">コピー結果</label>
+              <button
+                id="btn-copy-result"
+                class="btn-copy-result"
+                title="コピー結果をクリップボードにコピー"
+              >
+                コピー
+              </button>
+            </div>
+            <textarea id="copy-result" class="textarea" readonly></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 編集モード -->
+      <div id="editor-mode">
+        <!-- ワークフロー選択 -->
+        <div class="workflow-select-panel">
+          <label class="workflow-select-label">ワークフロー</label>
+          <div class="workflow-selector">
+            <select id="workflow-select"></select>
+            <button
+              id="btn-reorder-workflow"
+              class="btn btn-small"
+              title="並べ替え"
+            >
+              &#x21C5;
+            </button>
+            <button
+              id="btn-new-workflow"
+              class="btn btn-small"
+              title="新規作成"
+            >
+              +
+            </button>
+            <button
+              id="btn-duplicate-workflow"
+              class="btn btn-small"
+              title="複製"
+            >
+              &#x2398;
+            </button>
+            <button
+              id="btn-delete-workflow"
+              class="btn btn-small btn-danger"
+              title="削除"
+            >
+              &times;
+            </button>
+          </div>
+          <div id="workflow-reorder" class="workflow-reorder hidden">
+            <div id="workflow-list" class="workflow-list"></div>
+            <button id="btn-reorder-done" class="btn btn-small btn-block">
+              完了
+            </button>
+          </div>
+          <div class="import-export">
+            <button id="btn-export" class="btn btn-small">Export JSON</button>
+            <button id="btn-import" class="btn btn-small">Import JSON</button>
+            <input type="file" id="file-import" accept=".json" class="hidden" />
+          </div>
+        </div>
+
+        <!-- ワークフロー編集エリア -->
+        <div class="workflow-edit-panel">
+          <!-- ワークフロー設定 -->
+          <div class="workflow-settings">
+            <div class="workflow-settings-row">
+              <div
+                class="workflow-settings-field workflow-settings-field--name"
+              >
+                <label class="label">ワークフロー名</label>
+                <input
+                  type="text"
+                  id="workflow-name"
+                  class="input"
+                  placeholder="ワークフロー名"
+                />
+              </div>
+              <div
+                class="workflow-settings-field workflow-settings-field--interval"
+              >
+                <label class="label">間隔 (ms)</label>
+                <input
+                  type="number"
+                  id="workflow-interval"
+                  class="input"
+                  value="500"
+                  min="0"
+                  step="100"
+                />
+              </div>
+            </div>
+            <label class="checkbox-label">
+              <input type="checkbox" id="workflow-stop-on-error" />
+              <span>失敗時に停止する</span>
+            </label>
+          </div>
+
+          <!-- ステップ一覧 -->
+          <div class="section">
+            <label class="label">ステップ</label>
+            <div id="steps-container"></div>
+            <button id="btn-add-step" class="btn btn-block">
+              + ステップ追加
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ピッカーオーバーレイ -->
+    <div id="picker-overlay" class="picker-overlay hidden">
+      <div class="picker-overlay-content">
+        <div class="picker-overlay-icon">&#x1F4CC;</div>
+        <div class="picker-overlay-text">ページ上で要素を選択してください</div>
+        <div class="picker-overlay-hint">
+          Esc またはここをクリックでキャンセル
+        </div>
+      </div>
+    </div>
+
+    <!-- セレクトオプションパ��ル -->
+    <div id="select-options-panel" class="select-options-panel hidden">
+      <div class="select-options-panel-header">
+        <span class="select-options-panel-title">セレクト要素のオプション</span>
+        <button id="btn-select-options-close" class="btn btn-small btn-danger">
+          閉じる
+        </button>
+      </div>
+      <div class="select-options-panel-hint">
+        クリックで入力値として設定します
+      </div>
+      <div id="select-options-list" class="select-options-list"></div>
+    </div>
+
+    <!-- DOM監視パネル -->
+    <div id="observer-panel" class="observer-panel hidden">
+      <div class="observer-panel-header">
+        <span class="observer-panel-title">DOM監視</span>
+        <button id="btn-observer-stop" class="btn btn-small btn-danger">
+          停止
+        </button>
+      </div>
+      <div class="observer-panel-hint">
+        ページ上でホバーやクリックして要素を表示させてください
+      </div>
+      <div class="observer-panel-actions">
+        <button id="btn-observer-clear" class="btn btn-small">クリア</button>
+        <span id="observer-count" class="observer-count">0 件</span>
+      </div>
+      <div id="observer-elements" class="observer-elements"></div>
+    </div>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

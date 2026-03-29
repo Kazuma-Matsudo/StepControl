@@ -1,0 +1,900 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #f8f9fa;
+}
+
+.app {
+  padding: 12px;
+}
+
+/* ヘッダー */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #4a90d9;
+}
+
+.header-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #4a90d9;
+}
+
+.header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ボタン */
+.btn {
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 6px 12px;
+  background: #4a90d9;
+  color: #fff;
+  transition: background 0.15s;
+}
+
+.btn:hover {
+  background: #3a7bc8;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-run {
+  background: #28a745;
+  font-size: 14px;
+  padding: 6px 14px;
+}
+
+.btn-run:hover {
+  background: #218838;
+}
+
+.btn-stop {
+  background: #dc3545;
+  font-size: 14px;
+  padding: 6px 14px;
+}
+
+.btn-stop:hover {
+  background: #c82333;
+}
+
+
+.btn-small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.btn-danger {
+  background: #dc3545;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* セクション */
+.section {
+  margin-bottom: 10px;
+}
+
+.label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+/* 入力 */
+.input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.2);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+  resize: vertical;
+  outline: none;
+}
+
+/* ワークフロー選択パネル */
+.workflow-select-panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.workflow-select-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #4a90d9;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.workflow-selector {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.workflow-selector select {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+  outline: none;
+  background: #f8f9fa;
+}
+
+.workflow-selector select:focus {
+  border-color: #4a90d9;
+  box-shadow: 0 0 0 2px rgba(74, 144, 217, 0.2);
+  background: #fff;
+}
+
+/* ワークフロー編集パネル */
+.workflow-edit-panel {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-left: 3px solid #4a90d9;
+  border-radius: 0 8px 8px 0;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.workflow-settings {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.workflow-settings-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.workflow-settings-field--name {
+  flex: 1;
+}
+
+.workflow-settings-field--interval {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.workflow-edit-panel .section {
+  margin-bottom: 10px;
+}
+
+.workflow-edit-panel .section:last-child {
+  margin-bottom: 0;
+}
+
+/* ワークフロー並べ替え */
+.workflow-reorder {
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px dashed #4a90d9;
+  border-radius: 4px;
+  background: #f4f8fd;
+}
+
+.workflow-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.workflow-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 13px;
+  user-select: none;
+}
+
+.workflow-item.dragging {
+  opacity: 0.4;
+}
+
+.workflow-item.drop-above {
+  border-top: 2px solid #4a90d9;
+}
+
+.workflow-item.drop-below {
+  border-bottom: 2px solid #4a90d9;
+}
+
+.workflow-drag-handle {
+  cursor: grab;
+  font-size: 14px;
+  color: #bbb;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.workflow-drag-handle:hover {
+  color: #666;
+}
+
+.workflow-drag-handle:active {
+  cursor: grabbing;
+}
+
+.workflow-item-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ステップカード */
+.step-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.step-card.dragging {
+  opacity: 0.4;
+}
+
+.step-card.drop-above {
+  border-top: 2px solid #4a90d9;
+}
+
+.step-card.drop-below {
+  border-bottom: 2px solid #4a90d9;
+}
+
+.step-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.drag-handle {
+  cursor: grab;
+  font-size: 16px;
+  color: #bbb;
+  padding: 0 4px;
+  user-select: none;
+  line-height: 1;
+}
+
+.drag-handle:hover {
+  color: #666;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.step-number {
+  font-size: 11px;
+  font-weight: 700;
+  color: #999;
+  flex: 1;
+}
+
+.step-card-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.step-card-actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #999;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.step-card-actions button:hover {
+  background: #eee;
+  color: #333;
+}
+
+.step-field {
+  margin-bottom: 6px;
+}
+
+.step-field:last-child {
+  margin-bottom: 0;
+}
+
+.step-field label {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.step-field input,
+.step-field select {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 12px;
+  outline: none;
+}
+
+.step-field input:focus,
+.step-field select:focus,
+.step-field textarea:focus {
+  border-color: #4a90d9;
+}
+
+.step-field textarea {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+}
+
+.value-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-multiline-toggle {
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  border-radius: 3px;
+  font-size: 10px;
+  padding: 1px 6px;
+  cursor: pointer;
+  color: #666;
+}
+
+.btn-multiline-toggle:hover {
+  background: #e8e8e8;
+  color: #333;
+}
+
+/* ステップオプション（折りたたみ） */
+.step-options {
+  margin-top: 6px;
+  border-top: 1px dashed #eee;
+  padding-top: 6px;
+}
+
+.step-options-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: #888;
+  padding: 2px 0;
+}
+
+.step-options-toggle:hover {
+  color: #555;
+}
+
+.step-options-arrow {
+  font-size: 9px;
+  width: 10px;
+  display: inline-block;
+}
+
+.step-options-badge {
+  font-size: 10px;
+  color: #4a90d9;
+  background: #eef4fc;
+  border-radius: 3px;
+  padding: 0 4px;
+  margin-left: 4px;
+}
+
+.step-options-body {
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: #fafbfc;
+  border-radius: 4px;
+}
+
+.step-options-body .step-field input {
+  max-width: 160px;
+}
+
+/* セレクタ入力行 */
+.selector-row {
+  display: flex;
+  gap: 4px;
+}
+
+.selector-row input {
+  flex: 1;
+}
+
+.btn-pick {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid #4a90d9;
+  border-radius: 3px;
+  background: #fff;
+  color: #4a90d9;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-pick:hover {
+  background: #4a90d9;
+  color: #fff;
+}
+
+/* インポート/エクスポート */
+.import-export {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #eee;
+}
+
+/* プログレス */
+.progress-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.elapsed-time {
+  font-size: 12px;
+  color: #888;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4a90d9;
+  border-radius: 3px;
+  transition: width 0.3s;
+  width: 0%;
+}
+
+/* ステップステータス */
+.step-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+}
+
+.step-status-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.step-status-time {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #888;
+  font-variant-numeric: tabular-nums;
+  min-width: 36px;
+  text-align: right;
+}
+
+.step-status-icon {
+  width: 18px;
+  text-align: center;
+}
+
+.step-status.done .step-status-icon {
+  color: #28a745;
+}
+
+.step-status.running .step-status-icon {
+  color: #ffc107;
+}
+
+.step-status.pending .step-status-icon {
+  color: #ccc;
+}
+
+.step-status.error .step-status-icon {
+  color: #dc3545;
+}
+
+/* チェックボックス */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* コピー結果ヘッダー */
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-copy-result {
+  border: 1px solid #4a90d9;
+  border-radius: 3px;
+  background: #fff;
+  color: #4a90d9;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-copy-result:hover {
+  background: #4a90d9;
+  color: #fff;
+}
+
+.btn-copy-result.copied {
+  background: #28a745;
+  border-color: #28a745;
+  color: #fff;
+}
+
+/* 実行結果パネル */
+.runner-panel {
+  border: 2px solid #4a90d9;
+  background: #fff;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.runner-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  background: #4a90d9;
+  cursor: pointer;
+  user-select: none;
+}
+
+.runner-panel-header:hover {
+  background: #3a7bc8;
+}
+
+.runner-panel.collapsed .runner-panel-header {
+  border-radius: 6px;
+}
+
+.runner-panel:not(.collapsed) .runner-panel-header {
+  border-radius: 6px 6px 0 0;
+}
+
+.runner-toggle-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.runner-panel-body {
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* ピッカーオーバーレイ */
+.picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.picker-overlay-content {
+  text-align: center;
+  color: #fff;
+  pointer-events: none;
+}
+
+.picker-overlay-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.picker-overlay-text {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.picker-overlay-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* セレクトオプションパネル */
+.select-options-panel {
+  border: 2px solid #4a90d9;
+  background: #fff;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.select-options-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #4a90d9;
+  border-radius: 4px 4px 0 0;
+}
+
+.select-options-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.select-options-panel-hint {
+  padding: 6px 10px;
+  font-size: 11px;
+  color: #888;
+  border-bottom: 1px solid #eee;
+}
+
+.select-options-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.select-option-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  margin: 2px 0;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.select-option-item:hover {
+  background: #eef4fc;
+  border-color: #4a90d9;
+}
+
+.select-option-item.current {
+  background: #eef4fc;
+  border-color: #4a90d9;
+}
+
+.select-option-text {
+  font-size: 12px;
+  color: #333;
+  flex: 1;
+  margin-right: 8px;
+}
+
+.select-option-value {
+  font-size: 11px;
+  font-family: monospace;
+  color: #4a90d9;
+}
+
+.select-option-current {
+  font-size: 10px;
+  color: #28a745;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* DOM監視ボ���ン */
+.btn-observe {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid #e67e22;
+  border-radius: 3px;
+  background: #fff;
+  color: #e67e22;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-observe:hover {
+  background: #e67e22;
+  color: #fff;
+}
+
+/* DOM監視パネル */
+.observer-panel {
+  border: 2px solid #e67e22;
+  background: #fff;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.observer-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #e67e22;
+  border-radius: 4px 4px 0 0;
+}
+
+.observer-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.observer-panel-hint {
+  padding: 6px 10px;
+  font-size: 11px;
+  color: #888;
+  border-bottom: 1px solid #eee;
+}
+
+.observer-panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.observer-count {
+  font-size: 11px;
+  color: #888;
+}
+
+.observer-elements {
+  max-height: 350px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.observer-element-item {
+  padding: 6px 8px;
+  margin: 2px 0;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.observer-element-item:hover {
+  background: #fef5ec;
+  border-color: #e67e22;
+}
+
+.observer-element-tag {
+  font-size: 11px;
+  font-family: monospace;
+  color: #c0392b;
+  word-break: break-all;
+}
+
+.observer-element-text {
+  font-size: 11px;
+  color: #333;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.observer-element-selector {
+  font-size: 10px;
+  font-family: monospace;
+  color: #888;
+  margin-top: 2px;
+  word-break: break-all;
+}
+
+/* ユーティリティ */
+.hidden {
+  display: none !important;
+}

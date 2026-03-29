@@ -1,0 +1,10 @@
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+
+# Claude Code local settings
+.claude/settings.local.json
